@@ -1,9 +1,7 @@
 import { env } from "@/env";
-import { buildClient, shutdownBot } from "@/client";
+import { client, shutdownBot } from "@/client";
 import { registerCommands } from "@/commands";
 import { logger } from "@/logger";
-
-const client = buildClient();
 
 const shutdown = async () => {
   await shutdownBot(client);
