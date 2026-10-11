@@ -15,7 +15,7 @@ jobs:
           runtime: node@24
           cache: true
       - name: Format files
-        run: pnpm fmt:check
+        run: pnpm fmt
       - name: Lint files
         run: pnpm lint
       - name: Run tests
