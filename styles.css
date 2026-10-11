@@ -1,0 +1,250 @@
+:root {
+  --bg: #07131f;
+  --panel: #0d1f2f;
+  --panel-strong: #122b3d;
+  --card: rgba(14, 25, 35, 0.9);
+  --text: #e5f0ff;
+  --muted: #9bb6cc;
+  --accent: #79d7ff;
+  --accent-strong: #38bdf8;
+  --border: rgba(155, 182, 204, 0.2);
+  --success: #7ee4a5;
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, "Segoe UI", sans-serif;
+  background: radial-gradient(
+    circle at top,
+    #0b1f2d 0%,
+    var(--bg) 38%,
+    #050b12 100%
+  );
+  color: var(--text);
+}
+
+.page-shell {
+  width: min(1200px, calc(100% - 32px));
+  margin: 36px auto 60px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: rgba(6, 13, 19, 0.82);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.kicker {
+  display: inline-block;
+  margin-bottom: 8px;
+  font-size: 0.73rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  line-height: 1.1;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+  max-width: 52ch;
+  line-height: 1.6;
+}
+
+.tab-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+  padding: 10px 0 0;
+}
+
+.tab-button {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.7rem 0.95rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 150ms ease;
+}
+
+.tab-button:hover,
+.tab-button:focus-visible {
+  border-color: rgba(121, 215, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.tab-button.active {
+  background: linear-gradient(135deg, var(--accent-strong), #6c8dff);
+  color: #04131d;
+  border-color: transparent;
+  box-shadow: 0 12px 25px rgba(56, 189, 248, 0.25);
+}
+
+.content-panel {
+  margin-top: 20px;
+  padding: 8px 4px 4px;
+}
+
+.doc-section {
+  display: none;
+  padding: 18px 10px 10px;
+  animation: fadeIn 0.2s ease;
+}
+
+.doc-section.active {
+  display: block;
+}
+
+.doc-section h2 {
+  margin: 0 0 18px;
+  font-size: clamp(1.35rem, 2vw, 1.9rem);
+  color: var(--accent);
+}
+
+.doc-section h3 {
+  margin: 1.4rem 0 0.7rem;
+  font-size: 1.08rem;
+  color: #d6ebff;
+}
+
+.doc-section p,
+.doc-section li,
+.doc-section blockquote,
+.doc-section code {
+  font-size: 0.98rem;
+  line-height: 1.75;
+}
+
+.doc-section p,
+.doc-section ul,
+.doc-section ol,
+.doc-section blockquote {
+  margin: 0.8rem 0;
+}
+
+.doc-section ul,
+.doc-section ol {
+  padding-left: 1.5rem;
+}
+
+.doc-section li + li {
+  margin-top: 0.25rem;
+}
+
+.doc-section a {
+  color: var(--accent);
+}
+
+.doc-section code {
+  padding: 0.1rem 0.38rem;
+  border-radius: 6px;
+  background: rgba(121, 215, 255, 0.08);
+  color: #d8f7ff;
+}
+
+.doc-section blockquote {
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  border-left: 3px solid var(--accent);
+  background: rgba(121, 215, 255, 0.06);
+  border-radius: 0 12px 12px 0;
+  color: #dfefff;
+}
+
+.doc-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: rgba(18, 38, 52, 0.75);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.doc-section th,
+.doc-section td {
+  padding: 0.8rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.doc-section th {
+  background: rgba(121, 215, 255, 0.08);
+  font-weight: 700;
+}
+
+.doc-section tr:last-child td {
+  border-bottom: none;
+}
+
+.callout {
+  margin-top: 18px;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  background: linear-gradient(
+    135deg,
+    rgba(56, 189, 248, 0.1),
+    rgba(108, 141, 255, 0.08)
+  );
+  border: 1px solid rgba(121, 215, 255, 0.18);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(100% - 18px, 1200px);
+    margin: 16px auto 36px;
+    padding: 16px;
+  }
+
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .tab-button {
+    flex: 1 1 calc(50% - 10px);
+    text-align: center;
+  }
+}
