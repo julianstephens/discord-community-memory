@@ -1,0 +1,47 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "tasks": {
+    "//#lint": {
+      "inputs": ["!.git/**", "!node_modules/**", "!packages/**"]
+    },
+    "//#lint:fix": {
+      "inputs": ["!.git/**", "!node_modules/**", "!packages/**"]
+    },
+    "//#fmt": {
+      "inputs": ["!.git/**", "!node_modules/**", "!packages/**"]
+    },
+    "//#fmt:fix": {
+      "inputs": ["!.git/**", "!node_modules/**", "!packages/**"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "tsconfig.tsbuildinfo"]
+    },
+    "clean:build": {
+      "dependsOn": ["build"]
+    },
+    "dev": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "lint:fix": {},
+    "fmt": {},
+    "fmt:fix": {},
+    "test": {
+      "dependsOn": ["build"]
+    },
+    "typecheck": {
+      "outputs": ["tsconfig.tsbuildinfo"]
+    }
+  },
+  "globalDependencies": [
+    ".oxlintrc.json",
+    ".lintstagedrc.js",
+    "tsconfig.base.json",
+    "tsconfig.build.json",
+    "tsconfig.json"
+  ],
+  "globalEnv": ["NODE_ENV"]
+}
