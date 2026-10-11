@@ -1,0 +1,17 @@
+.git
+.agents
+.codex
+.aws
+.husky
+**/node_modules
+**/dist
+**/.turbo
+**/coverage
+**/*.tsbuildinfo
+**/*.log
+**/.env
+**/.env.*
+**/.envrc
+**/.direnv
+**/.pnpm-store
+out
