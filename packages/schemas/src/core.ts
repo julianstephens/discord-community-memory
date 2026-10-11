@@ -3,8 +3,9 @@ import { z } from "zod";
 export const guildSchema = z.object({
   id: z.string(),
   enabled: z.boolean().default(false),
-  ingestion_mode: z.enum(["manual", "automatic"]),
-  retention_days: z.number().default(30),
+  ingestion_mode: z.enum(["manual", "automatic"]).default("manual"),
+  retention_days: z.number().int().min(1).max(3650).nullable(),
+  created_at: z.date(),
 });
 export type Guild = z.infer<typeof guildSchema>;
 
@@ -23,39 +24,34 @@ export const sourceMessageSchema = z.object({
   author_id: z.string(),
   content: z.string(),
   source_timestamp: z.date(),
-  edited_at: z.date().optional(),
-  reconciled_at: z.date().optional(),
-  deleted_at: z.date().optional(),
+  edited_at: z.date().nullish(),
+  reconciled_at: z.date().nullish(),
+  deleted_at: z.date().nullish(),
 });
 export type SourceMessage = z.infer<typeof sourceMessageSchema>;
 
 export const memoryEntrySchema = z
   .object({
-    id: z.string(),
+    // PostgreSQL UUID accepts any 128-bit value, regardless of version bits.
+    id: z.guid(),
     guild_id: z.string(),
     channel_id: z.string(),
-    source_message_id: z.string().optional(),
+    source_message_id: z.string().nullish(),
     kind: z.enum(["message", "note", "decision", "resource"]),
-    title: z.string().optional(),
-    content: z.string().optional(),
+    title: z.string().nullish(),
+    content: z.string().nullish(),
     created_by: z.string(),
     created_at: z.date(),
-    deleted_at: z.date().optional(),
+    deleted_at: z.date().nullish(),
   })
   .refine(
-    (val) => val.kind === "message" && val.source_message_id && !val.content,
+    (val) =>
+      val.kind === "message"
+        ? val.source_message_id != null && val.content == null
+        : val.source_message_id == null && val.content != null,
     {
       error:
-        "Content must not be empty for message kind with a source message ID",
-      abort: true,
-    },
-  )
-  .refine(
-    (val) => val.kind !== "message" || !val.source_message_id || val.content,
-    {
-      error:
-        "Content must be empty for non-message kinds or when there is no source message ID",
-      abort: true,
+        "Messages require a source message ID and no content; other kinds require content and no source message ID",
     },
   );
 export type MemoryEntry = z.infer<typeof memoryEntrySchema>;

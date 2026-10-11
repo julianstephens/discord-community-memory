@@ -1,5 +1,5 @@
 import type { Client } from "discord.js";
-import { nanoid } from "nanoid";
+import { randomUUID } from "node:crypto";
 import {
   memoryEntrySchema,
   type CreateEntryInput,
@@ -29,20 +29,19 @@ class Service implements MemoryService {
   };
 
   saveMessage = async (input: SaveMessageInput): Promise<MemoryEntry> => {
-    const message = await this.getMessage(input.channelId, input.messageId);
+    const message = await this.getMessage(input.channel_id, input.message_id);
     if (!message) {
       // FIXME: improve error handling
       throw new Error("no message");
     }
     const newEntry: MemoryEntry = memoryEntrySchema.parse({
-      id: nanoid(),
-      guild_id: input.guildId,
-      channel_id: input.channelId,
+      id: randomUUID(),
+      guild_id: input.guild_id,
+      channel_id: input.channel_id,
       kind: "message",
       created_by: message.author.id,
       created_at: new Date(),
-      source_message_id: input.messageId,
-      content: message.content,
+      source_message_id: input.message_id,
     });
     // TODO: save entry in db
     return newEntry;
@@ -50,11 +49,11 @@ class Service implements MemoryService {
 
   createEntry = async (input: CreateEntryInput): Promise<MemoryEntry> => {
     const newEntry: MemoryEntry = memoryEntrySchema.parse({
-      id: nanoid(),
-      guild_id: input.guildId,
-      channel_id: input.channelId,
-      kind: input.type,
-      created_by: input.createdBy,
+      id: randomUUID(),
+      guild_id: input.guild_id,
+      channel_id: input.channel_id,
+      kind: input.kind,
+      created_by: input.user_id,
       created_at: new Date(),
       title: input.title,
       content: input.content,
