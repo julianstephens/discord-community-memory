@@ -245,6 +245,9 @@ importers:
       pino:
         specifier: ^10.4.0
         version: 10.4.0
+      schemas:
+        specifier: workspace:*
+        version: link:../../packages/schemas
       zod:
         specifier: ^4.6.5
         version: 4.6.5

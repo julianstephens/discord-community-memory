@@ -1,5 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Events, GatewayIntentBits, REST } from "discord.js";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("bot client configuration", () => {
   beforeEach(() => {
@@ -82,6 +82,61 @@ describe("bot client configuration", () => {
       content: "This command can only be used in a server.",
       ephemeral: true,
     });
+  });
+
+  it("reports the disabled-by-default guild state without exposing content", async () => {
+    const { memoryCommand } = await import("./commands/memory.ts");
+    const interaction = {
+      inGuild: () => true,
+      guildId: "guild-1",
+      options: {
+        getSubcommand: () => "status",
+        getSubcommandGroup: () => false,
+      },
+      reply: vi.fn().mockResolvedValue(undefined),
+    };
+
+    await memoryCommand(interaction as any);
+
+    expect(interaction.reply).toHaveBeenCalledWith(
+      expect.objectContaining({
+        content: expect.stringContaining("Community memory is disabled"),
+        ephemeral: true,
+      }),
+    );
+  });
+
+  it("requires ManageGuild or Administrator privileges to toggle config", async () => {
+    const { memoryCommand } = await import("./commands/memory.ts");
+    const interaction = {
+      inGuild: () => true,
+      guildId: "guild-1",
+      member: {
+        permissions: {
+          has: vi.fn().mockReturnValue(false),
+        },
+      },
+      options: {
+        getSubcommand: () => "enable",
+        getSubcommandGroup: () => "config",
+      },
+      reply: vi.fn().mockResolvedValue(undefined),
+    };
+
+    await memoryCommand(interaction as any);
+
+    expect(interaction.reply).toHaveBeenCalledWith({
+      content:
+        "You do not have permission to configure community memory. Requires Manage Guild or Administrator.",
+      ephemeral: true,
+    });
+  });
+
+  it("refuses to save messages while a guild is disabled", async () => {
+    const { saveMessageCommand } = await import("./commands/save-message.ts");
+    await expect(
+      saveMessageCommand({ guildId: "guild-disabled" } as any),
+    ).rejects.toThrow("Guild memory is disabled.");
   });
 
   it("registers the expected slash commands and remains idempotent when re-run", async () => {
