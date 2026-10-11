@@ -1,6 +1,7 @@
 import { Client, Events, GatewayIntentBits } from "discord.js";
-import { saveMessageCommand } from "./commands/save-message";
-import { logger } from "./logger";
+import { saveMessageCommand } from "@/commands/save-message";
+import { logger } from "@/logger";
+import { memoryCommand } from "@/commands/memory";
 
 export const REQUIRED_GUILD_INTENTS = [
   GatewayIntentBits.Guilds,
@@ -88,6 +89,26 @@ client.on(Events.InteractionCreate, async (interaction) => {
         content: "This command can only be used in a server.",
         ephemeral: true,
       });
+    }
+    return;
+  }
+
+  if (
+    interaction.isChatInputCommand() &&
+    interaction.commandName === "memory"
+  ) {
+    try {
+      await memoryCommand(interaction);
+    } catch (error) {
+      logger.error({ err: error }, "Failed to handle memory command");
+      if (interaction.isRepliable()) {
+        await interaction
+          .reply({
+            content: `Failed to process memory command: ${mapDiscordRestError(error)}`,
+            ephemeral: true,
+          })
+          .catch(() => undefined);
+      }
     }
     return;
   }
