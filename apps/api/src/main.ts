@@ -13,7 +13,7 @@ import fastifySwaggerUI from "@fastify/swagger-ui";
 import Fastify, { type FastifyInstance } from "fastify";
 import { ApiError } from "@/handlers";
 import { toRequestErrorResponse } from "@/error-response";
-import z from "zod";
+import { z } from "zod";
 
 const setupApp = async (): Promise<FastifyInstance> => {
   const app = Fastify({

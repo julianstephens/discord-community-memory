@@ -1,17 +1,10 @@
-import { Client, Events, GatewayIntentBits } from "discord.js";
+import { Client, Events } from "discord.js";
 import { saveMessageCommand } from "@/commands/save-message";
 import { logger } from "@/logger";
 import { memoryCommand } from "@/commands/memory";
+import { buildClient } from "application";
 
-export const REQUIRED_GUILD_INTENTS = [
-  GatewayIntentBits.Guilds,
-  GatewayIntentBits.GuildMessages,
-];
-
-export const buildClient = () =>
-  new Client({
-    intents: REQUIRED_GUILD_INTENTS,
-  });
+export { buildClient };
 
 export const client = buildClient();
 
